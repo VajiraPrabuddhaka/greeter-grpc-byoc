@@ -22,9 +22,16 @@ FROM alpine:latest
 
 RUN apk --no-cache add ca-certificates
 
-WORKDIR /root/
+RUN addgroup -g 10014 choreo && \
+    adduser -D -s /bin/sh -u 10014 -G choreo choreouser
+
+WORKDIR /home/choreouser
 
 COPY --from=builder /app/main .
+
+RUN chown -R 10014:10014 /home/choreouser
+
+USER 10014
 
 EXPOSE 50051
 
