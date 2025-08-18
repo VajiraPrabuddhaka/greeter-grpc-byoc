@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: Greeting HTTP-to-gRPC Gateway
+  description: HTTP REST API that forwards requests to a gRPC greeting service
+  version: 1.0.0
+  contact:
+    name: Greeter Service
+    email: support@example.com
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://api.example.com
+    description: Production server
+paths:
+  /greet:
+    get:
+      summary: Get a personalized greeting
+      description: Forwards the request to the gRPC greeting service and returns a personalized greeting message
+      operationId: getGreeting
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: The name to include in the greeting
+          schema:
+            type: string
+            example: World
+            minLength: 1
+            maxLength: 100
+      responses:
+        '200':
+          description: Successful greeting response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GreetingResponse'
+              examples:
+                example1:
+                  summary: Basic greeting
+                  value:
+                    message: "Hello, World!"
+                example2:
+                  summary: Custom name greeting
+                  value:
+                    message: "Hello, Alice!"
+        '400':
+          description: Bad request - missing or invalid name parameter
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "name parameter is required"
+        '500':
+          description: Internal server error - gRPC service unavailable
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Internal server error"
+      tags:
+        - Greeting
+components:
+  schemas:
+    GreetingResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: The greeting message
+          example: "Hello, World!"
+      example:
+        message: "Hello, World!"
+tags:
+  - name: Greeting
+    description: Operations for getting personalized greetings
