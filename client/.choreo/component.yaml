@@ -13,7 +13,7 @@ endpoints:
       # For gRPC services, basePath is typically "/" or omitted as gRPC uses service names from proto
       basePath: /
       # +required Numeric port value that gets exposed via the endpoint
-      port: 50051
+      port: 8080
     # +required Type of traffic that the endpoint is accepting.
     # Allowed values: REST, GraphQL, WS, GRPC, TCP, UDP.
     type: REST
